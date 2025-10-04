@@ -3,13 +3,16 @@ package com.estudando.spring.Screenmatch.test;
 import com.estudando.spring.Screenmatch.entities.DadosEpisodio;
 import com.estudando.spring.Screenmatch.entities.DadosSerie;
 import com.estudando.spring.Screenmatch.entities.DadosTemporada;
+import com.estudando.spring.Screenmatch.entities.Episodio;
 import com.estudando.spring.Screenmatch.service.ConsumoApi;
 import com.estudando.spring.Screenmatch.service.ConverteDados;
 
 import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
     Scanner scanner = new Scanner(System.in);
@@ -55,8 +58,33 @@ public class Main {
 //       }
 
 
-        //LAMBDA
+        //LAMBDA  versão do Java 8.
+       //API STREAMS  encadear operações
+       //  stream é uma sequência de elementos que pode ser processada em paralelo ou em série.
+       // As operações intermediárias são aquelas que podem ser aplicadas em uma stream e retornam uma nova stream como resultado.
+       // .sorted() ordenar .limit(número) imprime od dados q vc colocar com número 3 - vai impirmir os 3 primeios dados da lista
+       //.filter() imprime o q entra no filtro
+       // Map: permite transformar cada elemento da stream em outro tipo de dado. Collect: permite coletar os elementos da stream em uma coleção ou em outro tipo de dado.
+
        temporadas.forEach(t-> t.episodios().forEach(e-> System.out.println(e.titulo())));
+        //Pegar os top 5 episódios de toda série, transformar em uma lista que tenha todos os episódios
+
+       List<DadosEpisodio> dadosEpisodios = temporadas.stream()
+               .flatMap(t -> t.episodios().stream())
+                       .collect(Collectors.toList());
+       dadosEpisodios.stream()
+               .filter(e-> !e.avaliacao().equalsIgnoreCase("N;A"))
+               .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
+               .limit(5)
+               .forEach(System.out::println);
+       //juntando listas
+        //Classe de episodios com seus atributos e estou criando uma lista atribuida a temporadas
+       //flatmaptransforma cada elemento em uma coleção/stream e depois “achata” tudo em um único stream contínuo.
+       List<Episodio> episodios =  temporadas.stream()
+               .flatMap(t -> t.episodios().stream()
+                       .map(d -> new Episodio(t.numero(), d))
+               ).collect(Collectors.toList());
+       episodios.forEach(System.out::println);
 
 
    }
