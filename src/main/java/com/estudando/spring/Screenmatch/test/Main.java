@@ -1,5 +1,6 @@
 package com.estudando.spring.Screenmatch.test;
 
+import com.estudando.spring.Screenmatch.entities.DadosEpisodio;
 import com.estudando.spring.Screenmatch.entities.DadosSerie;
 import com.estudando.spring.Screenmatch.entities.DadosTemporada;
 import com.estudando.spring.Screenmatch.service.ConsumoApi;
@@ -43,6 +44,19 @@ public class Main {
         temporadas.add(dadosTemporada);
        }
        temporadas.forEach(System.out::println);
+
+       //Aqui estou fazendo uma iteração para buscar os episódios das temporadas e o título
+
+//       for (int i = 0; i < dadosSerie.totalTemporadas(); i++){
+//           List<DadosEpisodio> episodiosTemporada = temporadas.get(i).episodios();
+//           for(int j = 0; j< episodiosTemporada.size(); j++){
+//               System.out.println(episodiosTemporada.get(j).titulo());
+//           }
+//       }
+
+
+        //LAMBDA
+       temporadas.forEach(t-> t.episodios().forEach(e-> System.out.println(e.titulo())));
 
 
    }
