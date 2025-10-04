@@ -76,10 +76,14 @@ public class Main {
                        .collect(Collectors.toList());
        dadosEpisodios.stream()
                .filter(e-> !e.avaliacao().equalsIgnoreCase("N;A"))
+               .peek(e-> System.out.println("Primeiro filtro (N/A)" + e))
+               //função para conseguir olhar cada resposta de cada função
                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
                .limit(5)
                .forEach(System.out::println);
        //juntando listas
+
+
         //Classe de episodios com seus atributos e estou criando uma lista atribuida a temporadas
        //flatmaptransforma cada elemento em uma coleção/stream e depois “achata” tudo em um único stream contínuo.
        List<Episodio> episodios =  temporadas.stream()
