@@ -10,10 +10,7 @@ import com.estudando.spring.Screenmatch.service.ConverteDados;
 import javax.sound.midi.Soundbank;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -84,6 +81,8 @@ public class Main {
        //juntando listas
 
 
+
+
         //Classe de episodios com seus atributos e estou criando uma lista atribuida a temporadas
        //flatmaptransforma cada elemento em uma coleção/stream e depois “achata” tudo em um único stream contínuo.
        List<Episodio> episodios =  temporadas.stream()
@@ -91,6 +90,20 @@ public class Main {
                        .map(d -> new Episodio(t.numero(), d))
                ).collect(Collectors.toList());
        episodios.forEach(System.out::println);
+
+       //Encontrando a primeira ocorrência de uma busca
+       System.out.println("Digite um trecho do título do episódio");
+       String trechoTitulo = scanner.nextLine();
+       Optional<Episodio> episodioBuscado = episodios.stream()//Optional é um objeto container que pode ou n ter valor não nulo, retorno opcional
+               .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))// a primeira referência que contém o q o user digitar vai imprimir
+               .findFirst();//aqui vai encontrar e precisa tratar esse retorno atribuindo ele a uma var episodioBucado
+       if(episodioBuscado.isPresent()){
+           System.out.println("Episódio encontrado!");
+           System.out.println("Temporada: " + episodioBuscado.get().getTemporada());
+       } else {
+           System.out.println("Episódio não encontrado!");
+       }
+
 
        //ver os episódios a partir de uma data
        System.out.println("A partir de que ano você deseja ver os episódios?");
@@ -108,5 +121,7 @@ public class Main {
                                " Data lançamento: " + e.getDataLancamento().format(formatador)
                ));
    }
+
+   //encontrando a primeira corrência de uma busca a uma coleção
 
 }
