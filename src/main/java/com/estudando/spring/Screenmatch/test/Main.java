@@ -64,7 +64,8 @@ public class Main {
        // .sorted() ordenar .limit(número) imprime od dados q vc colocar com número 3 - vai impirmir os 3 primeios dados da lista
        //.filter() imprime o q entra no filtro
        // Map: permite transformar cada elemento da stream em outro tipo de dado. Collect: permite coletar os elementos da stream em uma coleção ou em outro tipo de dado.
-
+        //Collectors é uma classe utilitária da API de Streams
+       //depois de processar os dados com .map(), .filter(), etc., você usa .collect() com um Collector para transformar o fluxo em algo utilizável.
        temporadas.forEach(t-> t.episodios().forEach(e-> System.out.println(e.titulo())));
         //Pegar os top 5 episódios de toda série, transformar em uma lista que tenha todos os episódios
 
@@ -94,6 +95,8 @@ public class Main {
        //Encontrando a primeira ocorrência de uma busca
        System.out.println("Digite um trecho do título do episódio");
        String trechoTitulo = scanner.nextLine();
+
+       //Ele pode conter um valor único ou nenhum valor.
        Optional<Episodio> episodioBuscado = episodios.stream()//Optional é um objeto container que pode ou n ter valor não nulo, retorno opcional
                .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))// a primeira referência que contém o q o user digitar vai imprimir
                .findFirst();//aqui vai encontrar e precisa tratar esse retorno atribuindo ele a uma var episodioBucado
@@ -120,8 +123,35 @@ public class Main {
                                " Episódio: " + e.getTitulo() +
                                " Data lançamento: " + e.getDataLancamento().format(formatador)
                ));
+
+       //criando um mapa com dados por temporada
+       //média de avaliações de uma temporada
+       Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+               .filter(e -> e.getAvaliacao() > 0.0)
+               .collect(Collectors.groupingBy(Episodio::getTemporada,
+                       Collectors.averagingDouble(Episodio::getAvaliacao)));
+       System.out.println(avaliacoesPorTemporada);
+
+       //buscar outras estatísticas -> classe DoubleSummaryStatistics
+       DoubleSummaryStatistics est = episodios.stream()
+               .filter(e -> e.getAvaliacao() > 0.0)
+               .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));//cletando dados e atribuindo para Double summary
+       //essa classe já imprime alguns estatísticas, pois ela já tem funções:
+       System.out.println("Média: " + est.getAverage());
+       System.out.println("Melhor episódio: " + est.getMax());
+       System.out.println("Pior episódio: " + est.getMin());
+       System.out.println("Quantidade: " + est.getCount());
+
+
+
+
+
+
+
    }
 
-   //encontrando a primeira corrência de uma busca a uma coleção
+
+
+
 
 }
