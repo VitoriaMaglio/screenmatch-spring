@@ -8,6 +8,8 @@ import com.estudando.spring.Screenmatch.service.ConsumoApi;
 import com.estudando.spring.Screenmatch.service.ConverteDados;
 
 import javax.sound.midi.Soundbank;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -86,6 +88,21 @@ public class Main {
                ).collect(Collectors.toList());
        episodios.forEach(System.out::println);
 
+       //ver os episódios a partir de uma data
+       System.out.println("A partir de que ano você deseja ver os episódios?");
+       int ano = scanner.nextInt(); scanner.nextLine();
+       LocalDate dataBusca = LocalDate.of(ano,1,1);//formada uma data a partir de 1º de janeiro do ano q a pessoa digitar
 
+       System.out.println("A partir de que ano você deseja ver os episódios? ");
+       DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+       episodios.stream()
+               .filter(e -> e.getDataLancamento() != null && e.getDataLancamento().isAfter(dataBusca))
+               .forEach(e -> System.out.println(
+                       "Temporada: " + e.getTemporada() +
+                               " Episódio: " + e.getTitulo() +
+                               " Data lançamento: " + e.getDataLancamento().format(formatador)
+               ));
    }
+
 }
