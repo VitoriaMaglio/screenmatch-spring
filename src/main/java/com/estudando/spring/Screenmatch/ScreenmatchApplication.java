@@ -5,6 +5,7 @@ import com.estudando.spring.Screenmatch.entities.DadosSerie;
 import com.estudando.spring.Screenmatch.entities.DadosTemporada;
 import com.estudando.spring.Screenmatch.service.ConsumoApi;
 import com.estudando.spring.Screenmatch.service.ConverteDados;
+import com.estudando.spring.Screenmatch.test.Main;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,11 +24,11 @@ public class ScreenmatchApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Primeiro projeto Spring sem web!");
         //chamando API
-        ConsumoApi consumoApi = new ConsumoApi();
+        //ConsumoApi consumoApi = new ConsumoApi();
         //declarando uma Strig json atribuída ao método da api com uma url de uma API Pública
         //Essa API retorna dados sobre filmes e séries: https://www.omdbapi.com/
-        String json = consumoApi.obterDados("https://www.omdbapi.com/?t=Gilmore+girls&apikey=604e9a2f");
-        System.out.println(json);
+        //String json = consumoApi.obterDados("https://www.omdbapi.com/?t=Gilmore+girls&apikey=604e9a2f");
+        //System.out.println(json);
         //Aqui recebemos a API, porém quando rodamos aparece no console os dados em JSON e queremos converter esses dados
         //Assim precisamos desserializá-los e transformar em objetos java:
             //Criar uma classe entidade que conecta atributos java com o nome dos campos da API
@@ -38,19 +39,19 @@ public class ScreenmatchApplication implements CommandLineRunner {
         //colar dependência do jackson em pom.xml
         //Jackson, uma biblioteca Java para processar JSON, que ajudam a mapear propriedades de classe para campos JSON.
 
-        ConverteDados converteDados = new ConverteDados();//instancia um conversor
-        DadosSerie dadosSerie = converteDados.obterDados(json, DadosSerie.class);
+        //ConverteDados converteDados = new ConverteDados();//instancia um conversor
+        //DadosSerie dadosSerie = converteDados.obterDados(json, DadosSerie.class);
         //receber dados do tipo json e vai converter para DadosSerie.class
-        System.out.println(dadosSerie);
+        //System.out.println(dadosSerie);
 
         //Deu erro pq trouxe dados que não mapeamos, por isso usamos a anotação JsonIgnoreProperties na classe de mapear dados
 
 
         //Aqui eu já crie outra classe de modelagem dos dados da API(DadosEpisodio), por isso tenho que atualizar a variável json com uma novo url para pegar od dados específicos
         //Com a mesma interface conseguimos converter diversos tipos de dados
-        json = consumoApi.obterDados("https://www.omdbapi.com/?t=Gilmore+girls&Season=1&episode=2&apikey=604e9a2f");
-        DadosEpisodio dadosEpisodio = converteDados.obterDados(json, DadosEpisodio.class);
-        System.out.println(dadosEpisodio);
+        //json = consumoApi.obterDados("https://www.omdbapi.com/?t=Gilmore+girls&Season=1&episode=2&apikey=604e9a2f");
+        //DadosEpisodio dadosEpisodio = converteDados.obterDados(json, DadosEpisodio.class);
+        //System.out.println(dadosEpisodio);
 
         //Aqui criei uma outra classe para modelar dados das temporadas da série
         //Para usar esses dados vamos fazer uma iteração de todas as temporadas pq se não iríamos precisar fazer um url para cada temporada da série
@@ -58,14 +59,23 @@ public class ScreenmatchApplication implements CommandLineRunner {
         //Declarar uma lista
         //Faz um for, instancia a classe e chama a lista.add atribuindo a instanciação
         //Imprime com foeEach
-        List<DadosTemporada> temporadas = new ArrayList<>();
+       // List<DadosTemporada> temporadas = new ArrayList<>();
 
-        for(int i =1; i<dadosSerie.totalTemporadas(); i++){
-            json = consumoApi.obterDados("https://www.omdbapi.com/?t=Gilmore+girls&Season=" + i + "&apikey=604e9a2f");
-            DadosTemporada dadosTemporada = converteDados.obterDados(json, DadosTemporada.class);
-            temporadas.add(dadosTemporada);
-        }
-        temporadas.forEach(System.out::println);
+        //for(int i =1; i<dadosSerie.totalTemporadas(); i++){
+           // json = consumoApi.obterDados("https://www.omdbapi.com/?t=Gilmore+girls&Season=" + i + "&apikey=604e9a2f");
+           // DadosTemporada dadosTemporada = converteDados.obterDados(json, DadosTemporada.class);
+           // temporadas.add(dadosTemporada);
+        //}
+        //temporadas.forEach(System.out::println);
 
+        //Agora o usuário vai poder escolher qual série ele quer ver os dados, então criei uma classe Main para criar método menu e chamar tudo por lá
+        Main main = new Main();
+        main.exibirMenu();
     }
 }
+
+
+//coleções são estruturas de dados fundamentais no Java, que nos permitem armazenar e manipular conjuntos de elementos de forma eficiente.
+//List: Uma coleção ordenada que permite elementos duplicados.
+//Set: Uma coleção que não permite elementos duplicados
+//Map: Uma coleção de pares chave-valor
