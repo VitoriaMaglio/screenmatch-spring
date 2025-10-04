@@ -1,11 +1,16 @@
 package com.estudando.spring.Screenmatch;
 
+import com.estudando.spring.Screenmatch.entities.DadosEpisodio;
 import com.estudando.spring.Screenmatch.entities.DadosSerie;
+import com.estudando.spring.Screenmatch.entities.DadosTemporada;
 import com.estudando.spring.Screenmatch.service.ConsumoApi;
 import com.estudando.spring.Screenmatch.service.ConverteDados;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -39,6 +44,28 @@ public class ScreenmatchApplication implements CommandLineRunner {
         System.out.println(dadosSerie);
 
         //Deu erro pq trouxe dados que não mapeamos, por isso usamos a anotação JsonIgnoreProperties na classe de mapear dados
+
+
+        //Aqui eu já crie outra classe de modelagem dos dados da API(DadosEpisodio), por isso tenho que atualizar a variável json com uma novo url para pegar od dados específicos
+        //Com a mesma interface conseguimos converter diversos tipos de dados
+        json = consumoApi.obterDados("https://www.omdbapi.com/?t=Gilmore+girls&Season=1&episode=2&apikey=604e9a2f");
+        DadosEpisodio dadosEpisodio = converteDados.obterDados(json, DadosEpisodio.class);
+        System.out.println(dadosEpisodio);
+
+        //Aqui criei uma outra classe para modelar dados das temporadas da série
+        //Para usar esses dados vamos fazer uma iteração de todas as temporadas pq se não iríamos precisar fazer um url para cada temporada da série
+        //Isso não é útil para o código, então com uma repetição fica mais otimizado.
+        //Declarar uma lista
+        //Faz um for, instancia a classe e chama a lista.add atribuindo a instanciação
+        //Imprime com foeEach
+        List<DadosTemporada> temporadas = new ArrayList<>();
+
+        for(int i =1; i<dadosSerie.totalTemporadas(); i++){
+            json = consumoApi.obterDados("https://www.omdbapi.com/?t=Gilmore+girls&Season=" + i + "&apikey=604e9a2f");
+            DadosTemporada dadosTemporada = converteDados.obterDados(json, DadosTemporada.class);
+            temporadas.add(dadosTemporada);
+        }
+        temporadas.forEach(System.out::println);
 
     }
 }
