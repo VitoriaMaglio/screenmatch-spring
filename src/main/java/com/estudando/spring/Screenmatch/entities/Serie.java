@@ -3,18 +3,36 @@ package com.estudando.spring.Screenmatch.entities;
 import com.estudando.spring.Screenmatch.enums.Categoria;
 import com.estudando.spring.Screenmatch.service.ConsultaTranslation;
 import com.theokanning.openai.OpenAiHttpException;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalDouble;
-
+//adicionando anotações JPA = mapeando objetos relacionais
+@Entity
+@Table(name = "tb_series")
 public class Serie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// auto incremento do id
+    private Long id;
+
     private String titulo;
     private Integer totalTemporadas;
     private Double avaliacao;
+
+    @Enumerated(EnumType.STRING)
     private Categoria genero; //listar categorias->enum
+
     private String atores;
     private String poster;
     private String sinopse;//Essa sinopse está em inglês, precisamos converter para português
     //Complicado por que precisamos traduzir todas as sinopses de séries para outra língua ->  consumindo API externa
+
+    //Atributo que relaciona Serie tem episódios
+    @Transient //obj que não vai ser salvo
+    private List<Episodio> episodioList = new ArrayList<>();
+
 
     //Construtor que faz os atributos dessa classe serem correspondentes aos campos da API
     public Serie(DadosSerie dadosSerie){
@@ -34,6 +52,14 @@ public class Serie {
         }
 
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -91,6 +117,7 @@ public class Serie {
     public void setSinopse(String sinopse) {
         this.sinopse = sinopse;
     }
+
 
 
     @Override

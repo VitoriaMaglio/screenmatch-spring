@@ -3,6 +3,7 @@ package com.estudando.spring.Screenmatch.test;
 import com.estudando.spring.Screenmatch.entities.DadosSerie;
 import com.estudando.spring.Screenmatch.entities.DadosTemporada;
 import com.estudando.spring.Screenmatch.entities.Serie;
+import com.estudando.spring.Screenmatch.repository.SerieRepository;
 import com.estudando.spring.Screenmatch.service.ConsumoApi;
 import com.estudando.spring.Screenmatch.service.ConverteDados;
 
@@ -23,6 +24,12 @@ public class Main2 {
 
     private List<DadosSerie> dadosSeries = new ArrayList<>();
 
+    private final SerieRepository repository;
+    // 🔹 Recebe o repositório injetado pela classe principal
+    public Main2(SerieRepository repository) {
+        this.repository = repository;
+    }
+
     public void exibeMenu() {
         var opcao = -1;
         while(opcao != 0) {
@@ -31,14 +38,13 @@ public class Main2 {
             2 - Buscar episódios
             3 - Listar séries buscadas
 
-            0 - Sair                                 
+            0 - Sair
             """;
-
             System.out.println(menu);
-            int opcao1 = leitura.nextInt();
+             opcao = leitura.nextInt();
             leitura.nextLine();
 
-            switch (opcao1) {
+            switch (opcao) {
                 case 1:
                     buscarSerieWeb();
                     break;
@@ -53,13 +59,16 @@ public class Main2 {
                     break;
                 default:
                     System.out.println("Opção inválida");
+
             }
         }
     }
     //Método que busca uma série digitada pelo usuário e exibe os dados
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();//chama o método getDadosSerie
-        dadosSeries.add(dados);
+        //dadosSeries.add(dados);
+        Serie serie = new Serie(dados);
+        repository.save(serie);
         System.out.println(dados);
     }
     //Método auxiliar que realmente faz a chamada na API e converte o retorno em um objeto Java.
