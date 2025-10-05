@@ -1,17 +1,10 @@
 package com.estudando.spring.Screenmatch;
 
-import com.estudando.spring.Screenmatch.entities.DadosEpisodio;
-import com.estudando.spring.Screenmatch.entities.DadosSerie;
-import com.estudando.spring.Screenmatch.entities.DadosTemporada;
-import com.estudando.spring.Screenmatch.service.ConsumoApi;
-import com.estudando.spring.Screenmatch.service.ConverteDados;
-import com.estudando.spring.Screenmatch.test.Main;
+import com.estudando.spring.Screenmatch.test.Main1;
+import com.estudando.spring.Screenmatch.test.Main2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -24,7 +17,9 @@ public class ScreenmatchApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Primeiro projeto Spring sem web!");
         //Agora o usuário vai poder escolher qual série ele quer ver os dados, então criei uma classe Main para criar método menu e chamar tudo por lá
-        Main main = new Main();
-        main.exibirMenu();
+        //Main1 main = new Main1();
+        //main.exibirMenu();
+        Main2 main2 = new Main2();
+        main2.exibeMenu();
     }
 }

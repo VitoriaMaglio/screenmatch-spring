@@ -7,38 +7,37 @@ import com.estudando.spring.Screenmatch.entities.Episodio;
 import com.estudando.spring.Screenmatch.service.ConsumoApi;
 import com.estudando.spring.Screenmatch.service.ConverteDados;
 
-import javax.sound.midi.Soundbank;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Main {
+public class Main1 {
     Scanner scanner = new Scanner(System.in);
 
-    //tornando atributos pois vão ser utilizados várias vezes
+    //Tornando atributos pois vão ser utilizados várias vezes
     private ConverteDados converteDados = new ConverteDados();
     private ConsumoApi consumoApi = new ConsumoApi();
 
-    //constantes valores fixos e imutáveis sejam armazenados e utilizados ao longo do código.
+    //Constantes valores fixos e imutáveis sejam armazenados e utilizados ao longo do código.
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String APIKEY = "&apikey=604e9a2f";
 
     //Adicionar final para indicar que esses "atributos" não vão ser modificados, e não vão mudar pois são as partes da url fixas
    public void exibirMenu(){
+
        System.out.println("Digite o nome da série que você deseja acessar dados: ");
        String nomeSerie = scanner.nextLine();
 
        String json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + APIKEY);
        //"https://www.omdbapi.com/?t=" Gilmore+girls" " &apikey=604e9a2f"
-       //TROCAR O ESPAÇO ENTRE OS NOMES DA SÉRIE
+       //Trocar o espaço entre o nome de uma série por +
 
        //Buscando dadosSerie
-
        DadosSerie dadosSerie = converteDados.obterDados(json, DadosSerie.class);
        System.out.println(dadosSerie);
 
-        List<DadosTemporada> temporadas = new ArrayList<>();
+       List<DadosTemporada> temporadas = new ArrayList<>();
 
        for(int i =1; i<dadosSerie.totalTemporadas(); i++){
         json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + "&season=" + i +  APIKEY);
@@ -56,19 +55,19 @@ public class Main {
 //           }
 //       }
 
-
-        //LAMBDA  versão do Java 8.
-       //API STREAMS  encadear operações
+       //LAMBDA  versão do Java 8.
+       // API STREAMS  encadear operações
        //  stream é uma sequência de elementos que pode ser processada em paralelo ou em série.
        // As operações intermediárias são aquelas que podem ser aplicadas em uma stream e retornam uma nova stream como resultado.
        // .sorted() ordenar .limit(número) imprime od dados q vc colocar com número 3 - vai impirmir os 3 primeios dados da lista
        //.filter() imprime o q entra no filtro
        // Map: permite transformar cada elemento da stream em outro tipo de dado. Collect: permite coletar os elementos da stream em uma coleção ou em outro tipo de dado.
-        //Collectors é uma classe utilitária da API de Streams
+       //Collectors é uma classe utilitária da API de Streams
        //depois de processar os dados com .map(), .filter(), etc., você usa .collect() com um Collector para transformar o fluxo em algo utilizável.
-       temporadas.forEach(t-> t.episodios().forEach(e-> System.out.println(e.titulo())));
-        //Pegar os top 5 episódios de toda série, transformar em uma lista que tenha todos os episódios
 
+       temporadas.forEach(t-> t.episodios().forEach(e-> System.out.println(e.titulo())));
+
+       //Pegar os top 5 episódios de toda série, transformar em uma lista que tenha todos os episódios
        List<DadosEpisodio> dadosEpisodios = temporadas.stream()
                .flatMap(t -> t.episodios().stream())
                        .collect(Collectors.toList());
@@ -79,13 +78,9 @@ public class Main {
                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
                .limit(5)
                .forEach(System.out::println);
-       //juntando listas
 
-
-
-
-        //Classe de episodios com seus atributos e estou criando uma lista atribuida a temporadas
-       //flatmaptransforma cada elemento em uma coleção/stream e depois “achata” tudo em um único stream contínuo.
+       //Classe de episodios com seus atributos e estou criando uma lista atribuida a temporadas
+       // flatmaptransforma cada elemento em uma coleção/stream e depois “achata” tudo em um único stream contínuo.
        List<Episodio> episodios =  temporadas.stream()
                .flatMap(t -> t.episodios().stream()
                        .map(d -> new Episodio(t.numero(), d))
@@ -106,7 +101,6 @@ public class Main {
        } else {
            System.out.println("Episódio não encontrado!");
        }
-
 
        //ver os episódios a partir de uma data
        System.out.println("A partir de que ano você deseja ver os episódios?");
