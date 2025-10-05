@@ -1,7 +1,8 @@
 package com.estudando.spring.Screenmatch.entities;
 
 import com.estudando.spring.Screenmatch.enums.Categoria;
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.estudando.spring.Screenmatch.service.ConsultaTranslation;
+import com.theokanning.openai.OpenAiHttpException;
 
 import java.util.OptionalDouble;
 
@@ -13,7 +14,7 @@ public class Serie {
     private String atores;
     private String poster;
     private String sinopse;//Essa sinopse está em inglês, precisamos converter para português
-    //Complicado por que precisamos traduzir todas as sinopses de séries para outra língua ->  consumir uma API
+    //Complicado por que precisamos traduzir todas as sinopses de séries para outra língua ->  consumindo API externa
 
     //Construtor que faz os atributos dessa classe serem correspondentes aos campos da API
     public Serie(DadosSerie dadosSerie){
@@ -25,7 +26,13 @@ public class Serie {
         //pegando a primeira categoria da série disponível na API; trim elimina espaços em branco e \n
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
-        this.sinopse = dadosSerie.sinopse();
+        try {
+            this.sinopse = ConsultaTranslation.obterTraducao(dadosSerie.sinopse()).trim();
+        } catch (OpenAiHttpException e) {
+            System.out.println("Não foi possível traduzir a sinopse: " + e.getMessage());
+            this.sinopse = dadosSerie.sinopse(); // mantém a sinopse original
+        }
+
 
     }
 
