@@ -2,15 +2,14 @@ package com.estudando.spring.Screenmatch.test;
 
 import com.estudando.spring.Screenmatch.entities.DadosSerie;
 import com.estudando.spring.Screenmatch.entities.DadosTemporada;
+import com.estudando.spring.Screenmatch.entities.Episodio;
 import com.estudando.spring.Screenmatch.entities.Serie;
 import com.estudando.spring.Screenmatch.repository.SerieRepository;
 import com.estudando.spring.Screenmatch.service.ConsumoApi;
 import com.estudando.spring.Screenmatch.service.ConverteDados;
+import jakarta.transaction.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main2 {
@@ -25,10 +24,12 @@ public class Main2 {
     private List<DadosSerie> dadosSeries = new ArrayList<>();
 
     private final SerieRepository repository;
-    // 🔹 Recebe o repositório injetado pela classe principal
+    // Recebe o repositório injetado pela classe principal
     public Main2(SerieRepository repository) {
         this.repository = repository;
     }
+
+    private List<Serie> series = new ArrayList<>();
 
     public void exibeMenu() {
         var opcao = -1;
@@ -80,16 +81,54 @@ public class Main2 {
         return dados;
     }
     //Método todas as temporadas e episódios de uma série informada.
+    @Transactional
     private void buscarEpisodioPorSerie(){
-        DadosSerie dadosSerie = getDadosSerie();
-        List<DadosTemporada> temporadas = new ArrayList<>();
 
-        for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
-            String json = consumo.obterDados(ENDERECO + dadosSerie.titulo().replace(" ", "+") + "&season=" + i + APIKEY);
-            DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
-            temporadas.add(dadosTemporada);
+        //DadosSerie dadosSerie = getDadosSerie();
+        //Buscar no banco a série
+        System.out.println("Escolha uma série pelo nome");
+        listarSeriesBuscadas();
+        String nomeSerie = leitura.nextLine();
+        //Cria um obj local de serie para aplicar a função lambda que filtra títulos que contenham 'nomeSerie' e pega a primeira ocorrência
+        Optional<Serie> serie = series.stream()
+                .filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
+                .findFirst();
+
+        //Verifica se a série está no banc
+        if (serie.isPresent()) {
+            var serieEncontrada = serie.get();
+            List<DadosTemporada> temporadas = new ArrayList<>();
+
+            for (int i = 1; i <= serieEncontrada.getTotalTemporadas(); i++) {
+                var json = consumo.obterDados(ENDERECO + serieEncontrada.getTitulo().replace(" ", "+") + "&season=" + i + APIKEY);
+                DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
+                temporadas.add(dadosTemporada);
+            }
+
+            temporadas.forEach(System.out::println);
+
+            List<Episodio> episodios = temporadas.stream()
+                    .flatMap(d -> d.episodios().stream()
+                            .map(e -> new Episodio(d.numero(), e)))
+                    .collect(Collectors.toList());
+
+            // Adiciona os episódios à série garantindo o relacionamento bidirecional
+            episodios.forEach(serieEncontrada::addEpisodio);
+
+            // Salva série e episódios no banco
+            repository.save(serieEncontrada);
+        } else {
+            System.out.println("Série não encontrada!");
         }
-        temporadas.forEach(System.out::println);
+
+//        List<DadosTemporada> temporadas = new ArrayList<>();
+//
+//        for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
+//            String json = consumo.obterDados(ENDERECO + dadosSerie.titulo().replace(" ", "+") + "&season=" + i + APIKEY);
+//            DadosTemporada dadosTemporada = conversor.obterDados(json, DadosTemporada.class);
+//            temporadas.add(dadosTemporada);
+//        }
+//        temporadas.forEach(System.out::println);
     }
     //Método que imprima a lista de séries buscadas-> cria uma lista de séries e no método de buscar séries
     //colocar essa lista .add(série inserida pelo use) pq ai são armazenadas na lista e conseguiremos retornar depois
@@ -102,7 +141,7 @@ public class Main2 {
 //                        .map(d ->new Serie(d))
 //                                .collect(Collectors.toList());
 
-        List<Serie> series = repository.findAll();//->aqui buscads os dados não de uma lista criada a partir das iterações do usuário e sim do banco
+        series = repository.findAll();//->aqui buscads os dados não de uma lista criada a partir das iterações do usuário e sim do banco
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);

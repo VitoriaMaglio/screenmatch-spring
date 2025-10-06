@@ -33,12 +33,19 @@ public class Serie {
     //@Transient //obj que não vai ser salvo
     //indicar para jpa como acontece o relacionamento -> 1 Série tme N episódios
     //mapear o relacionamento indicando o atributo da outra classe com a relação para não confundir
-    @OneToMany( mappedBy = "serie")
+    @OneToMany( mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)//Define que todas as operações de persistência feitas na entidade pai serão propagadas para os filhos.
     private List<Episodio> episodioList = new ArrayList<>();
+    //fetch = FetchType.EAGER -> estava dando erro de LazyInitializationException = dados da coleção não são buscados no banco imediatamente, mas só quando você tenta acessá-los.
+    //Adicionar entidade @Transactional no método e fetch no relacionamento carregar todos os episódios junto com a série,
 
     //Construtor padrão exigido pela JPA
     public Serie(){
+    }
 
+    //PersistentBag carregado lazy pelo Hibernate
+    public void addEpisodio(Episodio episodio) {
+        episodio.setSerie(this);      // garante que o ManyToOne é atualizado
+        this.episodioList.add(episodio); // adiciona na lista do OneToMany
     }
 
 
@@ -139,5 +146,8 @@ public class Serie {
                 ", poster='" + poster + '\'' +
                 ", sinopse='" + sinopse + '\'' +
                 '}';
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
     }
 }
