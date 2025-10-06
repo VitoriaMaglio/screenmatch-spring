@@ -30,8 +30,16 @@ public class Serie {
     //Complicado por que precisamos traduzir todas as sinopses de séries para outra língua ->  consumindo API externa
 
     //Atributo que relaciona Serie tem episódios
-    @Transient //obj que não vai ser salvo
+    //@Transient //obj que não vai ser salvo
+    //indicar para jpa como acontece o relacionamento -> 1 Série tme N episódios
+    //mapear o relacionamento indicando o atributo da outra classe com a relação para não confundir
+    @OneToMany( mappedBy = "serie")
     private List<Episodio> episodioList = new ArrayList<>();
+
+    //Construtor padrão exigido pela JPA
+    public Serie(){
+
+    }
 
 
     //Construtor que faz os atributos dessa classe serem correspondentes aos campos da API

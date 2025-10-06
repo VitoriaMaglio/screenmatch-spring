@@ -97,10 +97,12 @@ public class Main2 {
     //Método que de acorod com as séries digitadas pelo user, vai imprimir uma lista indicando as categorias das séries que ele digitou
 
     private void listarSeriesBuscadas() {
-        List<Serie> series = new ArrayList<>();
-        series = dadosSeries.stream()
-                        .map(d ->new Serie(d))
-                                .collect(Collectors.toList());
+      // List<Serie> series = new ArrayList<>();
+//        series = dadosSeries.stream()
+//                        .map(d ->new Serie(d))
+//                                .collect(Collectors.toList());
+
+        List<Serie> series = repository.findAll();//->aqui buscads os dados não de uma lista criada a partir das iterações do usuário e sim do banco
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
