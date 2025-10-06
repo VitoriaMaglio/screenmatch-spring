@@ -4,6 +4,7 @@ import com.estudando.spring.Screenmatch.entities.DadosSerie;
 import com.estudando.spring.Screenmatch.entities.DadosTemporada;
 import com.estudando.spring.Screenmatch.entities.Episodio;
 import com.estudando.spring.Screenmatch.entities.Serie;
+import com.estudando.spring.Screenmatch.enums.Categoria;
 import com.estudando.spring.Screenmatch.repository.SerieRepository;
 import com.estudando.spring.Screenmatch.service.ConsumoApi;
 import com.estudando.spring.Screenmatch.service.ConverteDados;
@@ -39,6 +40,8 @@ public class Main2 {
             2 - Buscar episódios
             3 - Listar séries buscadas
             4 - Buscar série por título
+            5-  Buscar série pelo nome do ator
+            6-  Buscar série por categoria
 
             0 - Sair
             """;
@@ -59,6 +62,12 @@ public class Main2 {
                 case 4:
                     buscarSerieTitulo();
                     break;
+                case 5:
+                    buscarSerieAtor();
+                    break;
+                case 6:
+                    buscarSerieCategoria();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -67,6 +76,28 @@ public class Main2 {
 
             }
         }
+    }
+
+        private void buscarSerieCategoria() {
+        System.out.println("Deseja buscar séries de que categoria/gênero? ");
+        var nomeGenero = leitura.nextLine();
+        Categoria categoria = Categoria.fromPortugues(nomeGenero);
+        List<Serie> serieCategoria = repository.findByGenero(categoria);
+        System.out.println("Séries da categoria " + nomeGenero);
+        serieCategoria.forEach(System.out::println);
+    }
+
+    private void buscarSerieAtor() {
+        //Para criar um método de busca:
+        //Colocar opção no menu, na interface criar o metodo querie e instanciar nessa classe o método
+        System.out.println("Escolha uma série pelo nome");
+        String nomeAtor = leitura.nextLine();
+        //Quando digitar nome do ator aparecer uma lista com as séries
+        List<Serie> seriesEncontradas = repository.findByAtoresContainingIgnoreCase(nomeAtor);
+        System.out.println("Séries em que " + nomeAtor + "trabalhou!");
+        //imprimir uma lista -> usar forEach
+        seriesEncontradas.forEach(s-> System.out.println(s.getTitulo()));
+        System.out.println(seriesEncontradas);
     }
 
     private void buscarSerieTitulo() {
