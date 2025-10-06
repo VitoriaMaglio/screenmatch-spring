@@ -6,15 +6,19 @@ import com.estudando.spring.Screenmatch.repository.SerieRepository;
 import com.estudando.spring.Screenmatch.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController//indicando que é uma classe controller-> recebe requisições http
+@RequestMapping("/series")
 public class SerieController {
 //requisições http
+
 //Iniciando o uso de DTO-> DATA TRANSFER OBJ
+
 //Testando Devtools e Live running
 //    @GetMapping("/inicio")
 //    public String retornarInicio(){
@@ -24,10 +28,19 @@ public class SerieController {
     @Autowired
     private SerieService serieService;
 
-    @GetMapping("/series")
+    @GetMapping
     public List<SerieDTO> obterSeries(){
         return serieService.obterTodasSeries();
     }
+
+    @GetMapping("/top5")
+    public List<SerieDTO> obterSeriesTpo5(){
+        return serieService.obterSeriesTop5();
+    }
+
+
+
+
 
 
 }

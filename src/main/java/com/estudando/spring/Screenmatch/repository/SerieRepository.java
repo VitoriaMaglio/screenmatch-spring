@@ -22,6 +22,8 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
 
     @Query("SELECT e FROM Serie s JOIN s.episodioList e WHERE LOWER(e.titulo) LIKE LOWER(CONCAT('%', :trecho, '%'))")
     List<Episodio> episodioTrecho(@Param("trecho") String trecho);
+
+    List<Serie> findTop5ByOrderByAvaliacaoDesc();
     //JPQL->ava Persistence Query Language, ou seja, Linguagem de Consulta de Persistência Java. Portanto, é uma linguagem de consulta própria do JPA, do controle de persistência do Java.
     //trabalha com objetos Java, não com tabelas diretamente.
 

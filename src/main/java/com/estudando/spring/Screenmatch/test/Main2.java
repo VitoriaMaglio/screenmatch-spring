@@ -43,6 +43,7 @@ public class Main2 {
             5-  Buscar série pelo nome do ator
             6-  Buscar série por categoria
             7-  Buscar episódio por trecho
+            8-  Top 5 Séries
 
             0 - Sair
             """;
@@ -72,6 +73,9 @@ public class Main2 {
                 case 7:
                     buscarEpisodioTrecho();
                     break;
+                case 8:
+                    buscarTop5Series();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -81,6 +85,13 @@ public class Main2 {
             }
         }
     }
+
+    private void buscarTop5Series() {
+        List<Serie> serieTop = repository.findTop5ByOrderByAvaliacaoDesc();
+        serieTop.forEach(s ->
+                System.out.println(s.getTitulo() + " avaliação: " + s.getAvaliacao()));
+    }
+
 
     private void buscarEpisodioTrecho() {
         System.out.println("Qual nome do episódio para busca?");
