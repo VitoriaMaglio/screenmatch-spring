@@ -38,6 +38,7 @@ public class Main2 {
             1 - Buscar séries
             2 - Buscar episódios
             3 - Listar séries buscadas
+            4 - Buscar série por título
 
             0 - Sair
             """;
@@ -55,6 +56,9 @@ public class Main2 {
                 case 3:
                     listarSeriesBuscadas();
                     break;
+                case 4:
+                    buscarSerieTitulo();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -64,6 +68,20 @@ public class Main2 {
             }
         }
     }
+
+    private void buscarSerieTitulo() {
+        System.out.println("Escolha uma série pelo nome");
+        String nomeSerie = leitura.nextLine();
+        Optional<Serie> serieBuscada = repository.findByTituloContainingIgnoreCase(nomeSerie);
+        // buscar série e se ela existe
+        if (serieBuscada.isPresent()) {
+            System.out.println("Dados da série: " + serieBuscada.get());
+        } else {
+            System.out.println("Série não encontrada!");
+        }
+    }
+
+
     //Método que busca uma série digitada pelo usuário e exibe os dados
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();//chama o método getDadosSerie
@@ -90,10 +108,11 @@ public class Main2 {
         listarSeriesBuscadas();
         String nomeSerie = leitura.nextLine();
         //Cria um obj local de serie para aplicar a função lambda que filtra títulos que contenham 'nomeSerie' e pega a primeira ocorrência
-        Optional<Serie> serie = series.stream()
-                .filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
-                .findFirst();
+//        Optional<Serie> serie = series.stream()
+//                .filter(s -> s.getTitulo().toLowerCase().contains(nomeSerie.toLowerCase()))
+//                .findFirst();
 
+        Optional<Serie> serie =repository.findByTituloContainingIgnoreCase(nomeSerie);
         //Verifica se a série está no banc
         if (serie.isPresent()) {
             var serieEncontrada = serie.get();

@@ -133,7 +133,14 @@ public class Serie {
         this.sinopse = sinopse;
     }
 
+    public List<Episodio> getEpisodioList() {
+        return episodioList;
+    }
 
+    public void setEpisodioList(List<Episodio> episodioList) {
+        episodioList.forEach(e-> e.setSerie(this));//indicando chave estrangeira, asociando os atributos
+        this.episodioList = episodioList;
+    }
 
     @Override
     public String toString() {
@@ -145,6 +152,7 @@ public class Serie {
                 ", atores='" + atores + '\'' +
                 ", poster='" + poster + '\'' +
                 ", sinopse='" + sinopse + '\'' +
+                ", episodios='" + episodioList + '\''+
                 '}';
     }
 
