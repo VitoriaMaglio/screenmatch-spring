@@ -3,6 +3,7 @@ package com.estudando.spring.Screenmatch.controller;
 import com.estudando.spring.Screenmatch.dto.SerieDTO;
 import com.estudando.spring.Screenmatch.entities.Serie;
 import com.estudando.spring.Screenmatch.repository.SerieRepository;
+import com.estudando.spring.Screenmatch.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,20 +13,21 @@ import java.util.stream.Collectors;
 
 @RestController//indicando que é uma classe controller-> recebe requisições http
 public class SerieController {
+//requisições http
+//Iniciando o uso de DTO-> DATA TRANSFER OBJ
+//Testando Devtools e Live running
+//    @GetMapping("/inicio")
+//    public String retornarInicio(){
+//        return "Bem vindo!";
+//    }
 
     @Autowired
-    private SerieRepository serieRepository;
-
-    //requisições http
+    private SerieService serieService;
 
     @GetMapping("/series")
     public List<SerieDTO> obterSeries(){
-    //Converter um obj para um objDTO e passar esses dados para outra lista.
-    return serieRepository.findAll().stream()
-            .map(s -> new SerieDTO(s.getId(), s.getTitulo(), s.getTotalTemporadas(), s.getAvaliacao(), s.getGenero(), s.getAtores(), s.getPoster(), s.getSinopse()))
-            .collect(Collectors.toList());
+        return serieService.obterTodasSeries();
     }
-    //Iniciando o uso de DTO-> DATA TRANSFER OBJ
 
 
 }
