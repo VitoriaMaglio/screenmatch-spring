@@ -24,10 +24,19 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
     List<Episodio> episodioTrecho(@Param("trecho") String trecho);
 
     List<Serie> findTop5ByOrderByAvaliacaoDesc();
+
+    @Query("select s from Serie s WHERE s.totalTemporadas <= :totalTemporadas AND s.avaliacao >= :avaliacao")
+    List<Serie> seriesPorTemporadaEAValiacao(int totalTemporadas, double avaliacao);
+
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie ORDER BY e.avaliacao DESC LIMIT 5")
+    List<Episodio> topEpisodiosPorSerie(Serie serie);
+
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie AND YEAR(e.dataLancamento) >= :anoLancamento")
+    List<Episodio> episodiosPorSerieEAno(Serie serie, int anoLancamento);
     //JPQL->ava Persistence Query Language, ou seja, Linguagem de Consulta de Persistência Java. Portanto, é uma linguagem de consulta própria do JPA, do controle de persistência do Java.
     //trabalha com objetos Java, não com tabelas diretamente.
 
     //Em vez de dizer “SELECT * FROM serie”, você diz “SELECT s FROM Serie s” — ou seja, seleciona objetos Serie.
     //Query é uma pergunta que vc faz ao banco, um comando para ser executado no banco
-
+    List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(int totalTemporadas, double avaliacao);
 }

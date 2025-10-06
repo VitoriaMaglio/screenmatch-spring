@@ -27,6 +27,8 @@ public class SerieService {
 
     }
 
+
+
     //Método específico que converte Serie para SerieDTO para chamar ele nos métodos de busca
     private List<SerieDTO> converterDados(List<Serie> series){
         return series.stream()

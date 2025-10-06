@@ -44,6 +44,9 @@ public class Main2 {
             6-  Buscar série por categoria
             7-  Buscar episódio por trecho
             8-  Top 5 Séries
+            9-  Filtrar séries
+            10 - Top 5 episódios por série
+            11- Buscar episódios a partir de uma data\s
 
             0 - Sair
             """;
@@ -76,6 +79,15 @@ public class Main2 {
                 case 8:
                     buscarTop5Series();
                     break;
+                case 9:
+                    filtrarSeriesPorTemporadaEAvaliacao();
+                    break;
+                case 10:
+                    topEpisodiosPorSerie();
+                    break;
+                case 11:
+                    buscarEpisodiosDepoisDeUmaData();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -85,6 +97,33 @@ public class Main2 {
             }
         }
     }
+
+    private void filtrarSeriesPorTemporadaEAvaliacao() {
+        System.out.println("Filtrar séries até quantas temporadas? ");
+        var totalTemporadas = leitura.nextInt();
+        leitura.nextLine();
+        System.out.println("Com avaliação a partir de que valor? ");
+        var avaliacao = leitura.nextDouble();
+        leitura.nextLine();
+        List<Serie> filtroSeries = repository.seriesPorTemporadaEAValiacao(totalTemporadas, avaliacao);
+        System.out.println("*** Séries filtradas ***");
+        filtroSeries.forEach(s ->
+                System.out.println(s.getTitulo() + "  - avaliação: " + s.getAvaliacao()));
+
+    }
+
+    private void topEpisodiosPorSerie(){
+        Optional<Serie> serieBuscada = buscarSerieTitulo();
+        if(serieBuscada.isPresent()){
+            Serie serie = serieBuscada.get();
+            List<Episodio> topEpisodios = repository.topEpisodiosPorSerie(serie);
+            topEpisodios.forEach(e ->
+                    System.out.printf("Série: %s Temporada %s - Episódio %s - %s Avaliação %s\n",
+                            e.getSerie().getTitulo(), e.getTemporada(),
+                            e.getNumeroEpisodio(), e.getTitulo(), e.getAvaliacao()));
+        }
+    }
+
 
     private void buscarTop5Series() {
         List<Serie> serieTop = repository.findTop5ByOrderByAvaliacaoDesc();
@@ -125,16 +164,17 @@ public class Main2 {
         System.out.println(seriesEncontradas);
     }
 
-    private void buscarSerieTitulo() {
-        System.out.println("Escolha uma série pelo nome");
-        String nomeSerie = leitura.nextLine();
-        Optional<Serie> serieBuscada = repository.findByTituloContainingIgnoreCase(nomeSerie);
-        // buscar série e se ela existe
-        if (serieBuscada.isPresent()) {
-            System.out.println("Dados da série: " + serieBuscada.get());
+    private Optional<Serie> buscarSerieTitulo() {
+        System.out.println("Escolha um série pelo nome: ");
+        var nomeSerie = leitura.nextLine();
+        Optional<Serie> serieBusca = repository.findByTituloContainingIgnoreCase(nomeSerie);
+
+        if (serieBusca.isPresent()) {
+            System.out.println("Dados da série: " + serieBusca.get());
         } else {
             System.out.println("Série não encontrada!");
         }
+        return serieBusca;
     }
 
 
@@ -225,6 +265,21 @@ public class Main2 {
     //e fazer lambda para cada elemento d em dadosSeries, cria um novo objeto Serie usando d
     //transforma o Stream de Serie de volta em uma lista.
     //.sorted(Comparator.comparing(Serie::getGenero)) → ordena as séries alfabeticamente pelo gênero (getGenero()
+
+    private void buscarEpisodiosDepoisDeUmaData() {
+        Optional<Serie> serieBuscada = buscarSerieTitulo();
+
+        if (serieBuscada.isPresent()) {
+            Serie serie = serieBuscada.get();
+            System.out.println("Digite o ano limite de lançamento");
+            var anoLancamento = leitura.nextInt();
+            leitura.nextLine();
+
+            List<Episodio> episodiosAno = repository.episodiosPorSerieEAno(serie, anoLancamento);
+            episodiosAno.forEach(System.out::println);
+        }
+    }
+
 
 }
 
