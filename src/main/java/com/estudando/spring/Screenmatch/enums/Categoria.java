@@ -27,7 +27,6 @@ public enum Categoria {
     }
     //Interpretar os valores da API e transforma no valor correspondente da Enum, percorrendo a lista e fazendo a associação
 
-
     public static Categoria fromPortugues(String text) {
         for (Categoria categoria : Categoria.values()) {
             if (categoria.categoriaPortugues.equalsIgnoreCase(text)) {
@@ -36,7 +35,5 @@ public enum Categoria {
         }
         throw new IllegalArgumentException("Nenhuma categoria encontrada para a string fornecida: " + text);
     }
-
-
 
 }

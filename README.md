@@ -19,6 +19,7 @@ Projeto desenvolvido em Java com Spring Boot e JPA, que consome APIs públicas p
 
 -Suporte a consultas complexas com JPQL, incluindo busca de episódios por trecho do título.
 
+- Comentários nas classes explicando progresso e funcionalidades.
 ---
 
 # Tecnologias utilizadas

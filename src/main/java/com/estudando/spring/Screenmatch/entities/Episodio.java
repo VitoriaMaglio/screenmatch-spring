@@ -18,10 +18,8 @@ public class Episodio {
     private Double avaliacao;
     private LocalDate dataLancamento;
 
-
     @ManyToOne
     private Serie serie;
-
 
     public Episodio() {
     }
@@ -46,62 +44,26 @@ public class Episodio {
     //reutilizar a lógica e os dados já existentes,
     //classe Episodio é responsável por representar um episódio de uma série, enquanto a classe DadosEpisodio pode ser vista como uma estrutura que contém dados brutos.
 
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
 
-    public Long getId() {
-        return id;
-    }
+    public Serie getSerie() {return serie;}
+    public void setSerie(Serie serie) {this.serie = serie;}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Integer getTemporada() {return temporada;}
+    public void setTemporada(Integer temporada) {this.temporada = temporada;}
 
-    public Serie getSerie() {
-        return serie;
-    }
+    public String getTitulo() {return titulo;}
+    public void setTitulo(String titulo) {this.titulo = titulo;}
 
-    public void setSerie(Serie serie) {
-        this.serie = serie;
-    }
+    public Integer getNumeroEpisodio() {return numeroEpisodio;}
+    public void setNumeroEpisodio(Integer numeroEpisodio) {this.numeroEpisodio = numeroEpisodio;}
 
-    public Integer getTemporada() {
-        return temporada;
-    }
+    public Double getAvaliacao() {return avaliacao;}
+    public void setAvaliacao(Double avaliacao) {this.avaliacao = avaliacao;}
 
-    public void setTemporada(Integer temporada) {
-        this.temporada = temporada;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public Integer getNumeroEpisodio() {
-        return numeroEpisodio;
-    }
-
-    public void setNumeroEpisodio(Integer numeroEpisodio) {
-        this.numeroEpisodio = numeroEpisodio;
-    }
-
-    public Double getAvaliacao() {
-        return avaliacao;
-    }
-
-    public void setAvaliacao(Double avaliacao) {
-        this.avaliacao = avaliacao;
-    }
-
-    public LocalDate getDataLancamento() {
-        return dataLancamento;
-    }
-
-    public void setDataLancamento(LocalDate dataLancamento) {
-        this.dataLancamento = dataLancamento;
-    }
+    public LocalDate getDataLancamento() {return dataLancamento;}
+    public void setDataLancamento(LocalDate dataLancamento) {this.dataLancamento = dataLancamento;}
 
     @Override
     public String toString() {

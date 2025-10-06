@@ -8,7 +8,6 @@ import java.net.http.HttpResponse;
 
 public class ConsultaTranslation {
 //Consumindo API para tradução das sinopses das series
-
     public static String obterTraducao(String texto) {
         try {
             String encodedText = URLEncoder.encode(texto, "UTF-8");

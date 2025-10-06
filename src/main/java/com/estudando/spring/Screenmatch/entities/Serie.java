@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
+
 //adicionando anotações JPA = mapeando objetos relacionais
 @Entity
 @Table(name = "tb_series")
@@ -48,7 +49,6 @@ public class Serie {
         this.episodioList.add(episodio); // adiciona na lista do OneToMany
     }
 
-
     //Construtor que faz os atributos dessa classe serem correspondentes aos campos da API
     public Serie(DadosSerie dadosSerie){
         this.titulo = dadosSerie.titulo();
@@ -65,22 +65,14 @@ public class Serie {
             System.out.println("Não foi possível traduzir a sinopse: " + e.getMessage());
             this.sinopse = dadosSerie.sinopse(); // mantém a sinopse original
         }
-
-
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Long getId() {return id;}
+    public void setId(Long id) {this.id = id;}
 
     public String getTitulo() {
         return titulo;
     }
-
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
@@ -88,7 +80,6 @@ public class Serie {
     public Integer getTotalTemporadas() {
         return totalTemporadas;
     }
-
     public void setTotalTemporadas(Integer totalTemporadas) {
         this.totalTemporadas = totalTemporadas;
     }
@@ -96,7 +87,6 @@ public class Serie {
     public Double getAvaliacao() {
         return avaliacao;
     }
-
     public void setAvaliacao(Double avaliacao) {
         this.avaliacao = avaliacao;
     }
@@ -104,7 +94,6 @@ public class Serie {
     public Categoria getGenero() {
         return genero;
     }
-
     public void setGenero(Categoria genero) {
         this.genero = genero;
     }
@@ -112,7 +101,6 @@ public class Serie {
     public String getAtores() {
         return atores;
     }
-
     public void setAtores(String atores) {
         this.atores = atores;
     }
@@ -120,7 +108,6 @@ public class Serie {
     public String getPoster() {
         return poster;
     }
-
     public void setPoster(String poster) {
         this.poster = poster;
     }
@@ -128,19 +115,15 @@ public class Serie {
     public String getSinopse() {
         return sinopse;
     }
-
     public void setSinopse(String sinopse) {
         this.sinopse = sinopse;
     }
 
-    public List<Episodio> getEpisodioList() {
-        return episodioList;
-    }
+    public List<Episodio> getEpisodioList() {return episodioList;}
 
     public void setEpisodioList(List<Episodio> episodioList) {
         episodioList.forEach(e-> e.setSerie(this));//indicando chave estrangeira, asociando os atributos
-        this.episodioList = episodioList;
-    }
+        this.episodioList = episodioList;}
 
     @Override
     public String toString() {
@@ -156,6 +139,5 @@ public class Serie {
                 '}';
     }
 
-    public void setEpisodios(List<Episodio> episodios) {
-    }
+    public void setEpisodios(List<Episodio> episodios) {}
 }

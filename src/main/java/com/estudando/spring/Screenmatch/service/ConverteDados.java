@@ -16,7 +16,6 @@ public class ConverteDados implements IConverteDados{
             throw new RuntimeException(e);
         }
     }
-
     //public DadosSerie obterDados(String json){}
     //Se criarmos um método de converter dados, ele teria que ser um método específico
     //Ai se precisar converter outros dados teríamos que criar mais métodos, por isso é importante criar uma interface e aplicar essa regra
