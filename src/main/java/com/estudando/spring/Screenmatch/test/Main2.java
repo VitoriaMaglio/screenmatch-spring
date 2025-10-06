@@ -42,6 +42,7 @@ public class Main2 {
             4 - Buscar série por título
             5-  Buscar série pelo nome do ator
             6-  Buscar série por categoria
+            7-  Buscar episódio por trecho
 
             0 - Sair
             """;
@@ -68,6 +69,9 @@ public class Main2 {
                 case 6:
                     buscarSerieCategoria();
                     break;
+                case 7:
+                    buscarEpisodioTrecho();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -78,7 +82,17 @@ public class Main2 {
         }
     }
 
-        private void buscarSerieCategoria() {
+    private void buscarEpisodioTrecho() {
+        System.out.println("Qual nome do episódio para busca?");
+        String trecho = leitura.nextLine();
+        List<Episodio> episodiosEncontrados = repository.episodioTrecho(trecho);
+        episodiosEncontrados.forEach(e ->
+                System.out.printf("Série: %s Temporada %s - Episódio %s - %s\n",
+                        e.getSerie().getTitulo(), e.getTemporada(),
+                        e.getNumeroEpisodio(), e.getTitulo()));;
+    }
+
+    private void buscarSerieCategoria() {
         System.out.println("Deseja buscar séries de que categoria/gênero? ");
         var nomeGenero = leitura.nextLine();
         Categoria categoria = Categoria.fromPortugues(nomeGenero);
