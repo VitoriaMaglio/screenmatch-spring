@@ -1,7 +1,9 @@
 package com.estudando.spring.Screenmatch.service;
 
+import com.estudando.spring.Screenmatch.dto.EpisodioDTO;
 import com.estudando.spring.Screenmatch.dto.SerieDTO;
 import com.estudando.spring.Screenmatch.entities.Serie;
+import com.estudando.spring.Screenmatch.enums.Categoria;
 import com.estudando.spring.Screenmatch.repository.SerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +53,35 @@ public class SerieService {
         }
         return null;
     }
+
+    //Método para carregar temporadas
+
+    public List<EpisodioDTO> obterTodasTemporadas(Long id) {
+        Optional<Serie> serie = serieRepository.findById(id);
+        //Código omitido
+        if (serie.isPresent()) {
+            Serie s = serie.get();
+            return s.getEpisodioList().stream()
+                    .map(e-> new EpisodioDTO(e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo()))
+                    .collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    public List<EpisodioDTO> obterTemporadasPorNumero(Long id, Long numero) {
+        return serieRepository.obterEpisodiosPorTemporada(id, numero)
+                .stream()
+                .map(e -> new EpisodioDTO(e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo()))
+                .collect(Collectors.toList());
+
+    }
+
+    public List<SerieDTO> obterSeriesPorCategoria(String nomeGenero) {
+        Categoria categoria = Categoria.fromPortugues(nomeGenero);
+        return converterDados(serieRepository.findByGenero(categoria));
+    }
+    //Método para mostrar epiódios de uma temporada
+
 }
 
 

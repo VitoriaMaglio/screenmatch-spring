@@ -1,5 +1,6 @@
 package com.estudando.spring.Screenmatch.controller;
 //Para que o Spring mapeie os pcotes, o que for rodar na aplicação deve derivar do mesmo pacote.
+import com.estudando.spring.Screenmatch.dto.EpisodioDTO;
 import com.estudando.spring.Screenmatch.dto.SerieDTO;
 import com.estudando.spring.Screenmatch.entities.Serie;
 import com.estudando.spring.Screenmatch.repository.SerieRepository;
@@ -51,8 +52,25 @@ public class SerieController {
         return serieService.obterPorId(id);
     }
 
+    @GetMapping("/{id}/temporadas/todas")
+    public List<EpisodioDTO> obterTodasTemporadas(@PathVariable Long id) {
+    return serieService.obterTodasTemporadas(id);
+    }
 
-}
+
+    @GetMapping("/{id}/temporadas/{numero}")
+    public List<EpisodioDTO> obterTemporadasPorNumero(@PathVariable Long id, @PathVariable Long numero){
+        return serieService.obterTemporadasPorNumero(id, numero);
+    }
+
+    @GetMapping("/categoria/{nomeGenero}")
+    public List<SerieDTO> obterSeriesPorCategoria(@PathVariable String nomeGenero){
+        return serieService.obterSeriesPorCategoria(nomeGenero);
+    }
+    }
+
+
+
 
 
 
