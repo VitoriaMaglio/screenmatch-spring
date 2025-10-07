@@ -112,17 +112,24 @@ public class Main2 {
 
     }
 
-    private void topEpisodiosPorSerie(){
+    private void topEpisodiosPorSerie() {
         Optional<Serie> serieBuscada = buscarSerieTitulo();
-        if(serieBuscada.isPresent()){
+        if (serieBuscada.isPresent()) {
             Serie serie = serieBuscada.get();
-            List<Episodio> topEpisodios = repository.topEpisodiosPorSerie(serie);
+            List<Episodio> topEpisodios = repository.topEpisodiosPorSerie(serie)
+                    .stream()
+                    .limit(5) // 🔥 Mostra só os 5 melhores
+                    .toList();
+
             topEpisodios.forEach(e ->
-                    System.out.printf("Série: %s Temporada %s - Episódio %s - %s Avaliação %s\n",
+                    System.out.printf("Série: %s | Temporada %s | Episódio %s - %s | Avaliação: %.1f\n",
                             e.getSerie().getTitulo(), e.getTemporada(),
                             e.getNumeroEpisodio(), e.getTitulo(), e.getAvaliacao()));
+        } else {
+            System.out.println("Série não encontrada!");
         }
     }
+
 
 
     private void buscarTop5Series() {

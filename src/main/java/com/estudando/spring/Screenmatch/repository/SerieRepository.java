@@ -17,22 +17,35 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
     //Usando queries methods para fazer buscar no banco de dado: declarar apenas o método na interface que a JPA realiza sua função
     //Método para encontrar uma Serie pelo seu nome
     Optional<Serie> findByTituloContainingIgnoreCase(String nomeSerie);
+
     List<Serie> findByAtoresContainingIgnoreCase(String nomeAtor);
+
     List<Serie> findByGenero(Categoria categoria);
 
+
+    // 🔹 Busca episódios que contenham parte do título
     @Query("SELECT e FROM Serie s JOIN s.episodioList e WHERE LOWER(e.titulo) LIKE LOWER(CONCAT('%', :trecho, '%'))")
     List<Episodio> episodioTrecho(@Param("trecho") String trecho);
 
+    // 🔹 Top 5 séries por avaliação
     List<Serie> findTop5ByOrderByAvaliacaoDesc();
 
-    @Query("select s from Serie s WHERE s.totalTemporadas <= :totalTemporadas AND s.avaliacao >= :avaliacao")
-    List<Serie> seriesPorTemporadaEAValiacao(int totalTemporadas, double avaliacao);
+    // 🔹 Séries filtradas por temporadas e avaliação mínima
+    @Query("SELECT s FROM Serie s WHERE s.totalTemporadas <= :totalTemporadas AND s.avaliacao >= :avaliacao")
+    List<Serie> seriesPorTemporadaEAValiacao(@Param("totalTemporadas") int totalTemporadas,
+                                             @Param("avaliacao") double avaliacao);
 
-    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie ORDER BY e.avaliacao DESC LIMIT 5")
-    List<Episodio> topEpisodiosPorSerie(Serie serie);
+    // 🔹 Top episódios de uma série, ordenados por avaliação
+    @Query("SELECT e FROM Serie s JOIN s.episodioList e WHERE s = :serie ORDER BY e.avaliacao DESC")
+    List<Episodio> topEpisodiosPorSerie(@Param("serie") Serie serie);
 
-    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie AND YEAR(e.dataLancamento) >= :anoLancamento")
-    List<Episodio> episodiosPorSerieEAno(Serie serie, int anoLancamento);
+    // 🔹 Episódios lançados após determinado ano
+    @Query("SELECT e FROM Serie s JOIN s.episodioList e " +
+            "WHERE s = :serie AND EXTRACT(YEAR FROM e.dataLancamento) >= :anoLancamento")
+    List<Episodio> episodiosPorSerieEAno(@Param("serie") Serie serie,
+                                         @Param("anoLancamento") int anoLancamento);
+
+
     //JPQL->ava Persistence Query Language, ou seja, Linguagem de Consulta de Persistência Java. Portanto, é uma linguagem de consulta própria do JPA, do controle de persistência do Java.
     //trabalha com objetos Java, não com tabelas diretamente.
 
