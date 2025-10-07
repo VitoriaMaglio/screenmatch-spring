@@ -6,6 +6,7 @@ import com.estudando.spring.Screenmatch.repository.SerieRepository;
 import com.estudando.spring.Screenmatch.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,7 +44,17 @@ public class SerieController {
         return serieService.obterLancamentos();
     }
 
+    //Código omitido
 
+    @GetMapping("/{id}")
+    public SerieDTO obterPorId(@PathVariable Long id) {
+        return serieService.obterPorId(id);
+    }
 
 
 }
+
+
+
+
+

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +38,24 @@ public class SerieService {
     }
 
     public List<SerieDTO> obterLancamentos() {
-        return converterDados(serieRepository.findTop5ByOrderByEpisodioListDataLancamentoDesc());
+        return converterDados(serieRepository.lancamentoRecentes());
+    }
+
+    //Método para buscar característias específicas
+    public SerieDTO obterPorId(Long id) {
+        Optional<Serie> serie = serieRepository.findById(id);
+        //Código omitido
+        if (serie.isPresent()) {
+            Serie s = serie.get();
+            return new SerieDTO(s.getId(), s.getTitulo(), s.getTotalTemporadas(), s.getAvaliacao(), s.getGenero(), s.getAtores(), s.getPoster(), s.getSinopse());
+        }
+        return null;
     }
 }
+
+
+    //Para vc criar um método para conectar ao front:
+    //Repository -> query
+    //Depois em controller cria a requisição http
+    //Service cria o retorno 
+
