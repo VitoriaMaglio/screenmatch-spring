@@ -1,7 +1,7 @@
 ScreenMatch-Spring-PostgreSQL
 ---
 # Cenário
-Projeto desenvolvido em Java com Spring Boot e JPA, que consome APIs públicas para buscar informações sobre séries de TV e seus episódios, armazenando os dados em um banco de dados relacional.
+Projeto desenvolvido durante cursos feitos na alura sobre Java com Spring Boot e JPA, com integração ao banco de dados relacional PostgreSQL, que consome APIs públicas para buscar informações sobre séries de TV e seus episódios, armazenando os dados em um banco de dados relacional.
 
 ---
 
@@ -34,6 +34,6 @@ Hibernate
 
 Maven
 
-Banco de dados relacional (H2, PostgreSQL ou MySQL)
+Banco de dados relacional (PostgreSQL)
 
 OMDb API para consumo de dados de séries
