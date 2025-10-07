@@ -23,23 +23,23 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
     List<Serie> findByGenero(Categoria categoria);
 
 
-    // 🔹 Busca episódios que contenham parte do título
+    //Busca episódios que contenham parte do título
     @Query("SELECT e FROM Serie s JOIN s.episodioList e WHERE LOWER(e.titulo) LIKE LOWER(CONCAT('%', :trecho, '%'))")
     List<Episodio> episodioTrecho(@Param("trecho") String trecho);
 
-    // 🔹 Top 5 séries por avaliação
+    //Top 5 séries por avaliação
     List<Serie> findTop5ByOrderByAvaliacaoDesc();
 
-    // 🔹 Séries filtradas por temporadas e avaliação mínima
+    //Séries filtradas por temporadas e avaliação mínima
     @Query("SELECT s FROM Serie s WHERE s.totalTemporadas <= :totalTemporadas AND s.avaliacao >= :avaliacao")
     List<Serie> seriesPorTemporadaEAValiacao(@Param("totalTemporadas") int totalTemporadas,
                                              @Param("avaliacao") double avaliacao);
 
-    // 🔹 Top episódios de uma série, ordenados por avaliação
+    // Top episódios de uma série, ordenados por avaliação
     @Query("SELECT e FROM Serie s JOIN s.episodioList e WHERE s = :serie ORDER BY e.avaliacao DESC")
     List<Episodio> topEpisodiosPorSerie(@Param("serie") Serie serie);
 
-    // 🔹 Episódios lançados após determinado ano
+    //Episódios lançados após determinado ano
     @Query("SELECT e FROM Serie s JOIN s.episodioList e " +
             "WHERE s = :serie AND EXTRACT(YEAR FROM e.dataLancamento) >= :anoLancamento")
     List<Episodio> episodiosPorSerieEAno(@Param("serie") Serie serie,

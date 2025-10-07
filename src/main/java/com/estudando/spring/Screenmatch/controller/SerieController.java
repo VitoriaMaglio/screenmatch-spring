@@ -45,8 +45,6 @@ public class SerieController {
         return serieService.obterLancamentos();
     }
 
-    //Código omitido
-
     @GetMapping("/{id}")
     public SerieDTO obterPorId(@PathVariable Long id) {
         return serieService.obterPorId(id);
@@ -57,7 +55,6 @@ public class SerieController {
     return serieService.obterTodasTemporadas(id);
     }
 
-
     @GetMapping("/{id}/temporadas/{numero}")
     public List<EpisodioDTO> obterTemporadasPorNumero(@PathVariable Long id, @PathVariable Long numero){
         return serieService.obterTemporadasPorNumero(id, numero);
@@ -67,7 +64,6 @@ public class SerieController {
     public List<SerieDTO> obterSeriesPorCategoria(@PathVariable String nomeGenero){
         return serieService.obterSeriesPorCategoria(nomeGenero);
     }
-
 
     @GetMapping("/{id}/temporadas/top")
     public List<EpisodioDTO> obterTopEpisodios(@PathVariable Long id){

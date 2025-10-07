@@ -20,6 +20,10 @@ public class SerieService {
     @Autowired
     private SerieRepository serieRepository;
 
+    //Para vc criar um método para conectar ao front:
+    //Repository -> query
+    //Depois em controller cria a requisição http
+    //Service cria o retorno
 
     public List<SerieDTO> obterTodasSeries() {
         //Converter um obj para um objDTO e passar esses dados para outra lista.
@@ -30,7 +34,6 @@ public class SerieService {
         return converterDados(serieRepository.findTop5ByOrderByAvaliacaoDesc());
 
     }
-
 
     //Método específico que converte Serie para SerieDTO para chamar ele nos métodos de busca
     private List<SerieDTO> converterDados(List<Serie> series) {
@@ -55,7 +58,6 @@ public class SerieService {
     }
 
     //Método para carregar temporadas
-
     public List<EpisodioDTO> obterTodasTemporadas(Long id) {
         Optional<Serie> serie = serieRepository.findById(id);
         //Código omitido
@@ -96,8 +98,5 @@ public class SerieService {
     }
 }
 
-    //Para vc criar um método para conectar ao front:
-    //Repository -> query
-    //Depois em controller cria a requisição http
-    //Service cria o retorno 
+
 
