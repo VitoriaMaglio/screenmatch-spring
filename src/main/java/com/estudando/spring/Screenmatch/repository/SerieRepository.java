@@ -44,6 +44,10 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
             "WHERE s = :serie AND EXTRACT(YEAR FROM e.dataLancamento) >= :anoLancamento")
     List<Episodio> episodiosPorSerieEAno(@Param("serie") Serie serie,
                                          @Param("anoLancamento") int anoLancamento);
+    List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(int totalTemporadas, double avaliacao);
+
+    //Método para conexão com front
+    List<Serie> findTop5ByOrderByEpisodioListDataLancamentoDesc();
 
 
     //JPQL->ava Persistence Query Language, ou seja, Linguagem de Consulta de Persistência Java. Portanto, é uma linguagem de consulta própria do JPA, do controle de persistência do Java.
@@ -51,5 +55,7 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
 
     //Em vez de dizer “SELECT * FROM serie”, você diz “SELECT s FROM Serie s” — ou seja, seleciona objetos Serie.
     //Query é uma pergunta que vc faz ao banco, um comando para ser executado no banco
-    List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(int totalTemporadas, double avaliacao);
+
+    //Se o método não tiver já um nome de uma query ele precisa declarar a query com a ação se não o JPQL tenta fazer e como n é ujm método dentro dos seus padrões dá erro
+
 }

@@ -86,7 +86,7 @@ public class Main2 {
                     topEpisodiosPorSerie();
                     break;
                 case 11:
-                    buscarEpisodiosDepoisDeUmaData();
+                    findTop5ByOrderByEpisodioListDataLancamentoDesc();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -273,7 +273,7 @@ public class Main2 {
     //transforma o Stream de Serie de volta em uma lista.
     //.sorted(Comparator.comparing(Serie::getGenero)) → ordena as séries alfabeticamente pelo gênero (getGenero()
 
-    private void buscarEpisodiosDepoisDeUmaData() {
+    private void findTop5ByOrderByEpisodioListDataLancamentoDesc() {
         Optional<Serie> serieBuscada = buscarSerieTitulo();
 
         if (serieBuscada.isPresent()) {
